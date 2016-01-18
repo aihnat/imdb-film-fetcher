@@ -4,7 +4,7 @@ import re
 
 ''' get list of films from imdb top 250 films html'''
 def get_film_ids(html):
-        soup = BeautifulSoup(html)
+        soup = BeautifulSoup(html, 'lxml')
 
         res = []
         for elem in filter(filter_films_tag, soup.find_all('td')):
