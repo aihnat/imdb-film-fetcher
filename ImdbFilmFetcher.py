@@ -3,6 +3,7 @@ import json
 import urllib2
 import io
 import argparse
+import sys
 
 import ImdbParser
 from OmdbApiClient import RemoteOmdbApiClient
@@ -10,8 +11,8 @@ from OmdbApiClient import RemoteOmdbApiClient
 if __name__ == '__main__':
 
     parser = argparse.ArgumentParser(description='Fetch top N film title and year info from imdb top 250 films')
-    parser.add_argument('-n', type=int)
-    parser.add_argument('--csv', type=str)
+    parser.add_argument('-n', type=int, nargs='?', default=10)
+    parser.add_argument('--csv', nargs='?', type=argparse.FileType('w'), default=sys.stdout)
 
     args = parser.parse_args()
 
@@ -19,7 +20,7 @@ if __name__ == '__main__':
 
     omdbApi = RemoteOmdbApiClient('http://www.omdbapi.com/?i=')
 
-    with io.open(args.csv,'w', encoding='utf8') as f:
+    with args.csv as f:
        for film_id in films:
            title, year = omdbApi.get_data(film_id)
            f.write('\'' + title + '\',' + year + '\n')
